@@ -3,6 +3,11 @@
 Very simple Asteroids implementation for PS1 using MIPS toolchain + Nugget + Psy-Q Dev Kit.
 
 
+## Binary ##
+
+* You can download the latest binary PS-EXE here: https://github.com/danx2016/ps1_asteroids/releases/tag/v0.0.1
+
+
 ## How to Build ##
 
 * Install Visual Studio Code + PSX.DEV extension (https://www.youtube.com/watch?v=KbAv-Ao7lzU)
