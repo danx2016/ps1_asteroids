@@ -37,7 +37,7 @@ static Polygon* asteroid_create_shape(ASTEROID_SIZE asteroid_size)
 static Entity* asteroid_create_tag(ENTITY_TYPE tag_type)
 {
     Entity *tag = entity_get_from_cache();
-    tag->type = TAG_START;
+    tag->type = tag_type;
     tag->is_enabled = false;
     tag->is_destroyed = false;
     tag->previous_entity = NULL;
