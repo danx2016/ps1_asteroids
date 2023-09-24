@@ -17,24 +17,15 @@ static Polygon* ship_polygon = NULL;
 static Polygon* ship_create_shape()
 {
     Polygon *polygon = gfx_create_polygon(7);
-    polygon->points[0].vx = -10;
-    polygon->points[0].vy = -5;
-    polygon->points[1].vx = -10;
-    polygon->points[1].vy = 5;
-    polygon->points[2].vx = 10;
-    polygon->points[2].vy = 0;
-    polygon->points[3].vx = -10;
-    polygon->points[3].vy = -5;
+    setVector(&polygon->points[0], -10, -5, 0);
+    setVector(&polygon->points[1], -10, 5, 0);
+    setVector(&polygon->points[2], 10, 0, 0);
+    setVector(&polygon->points[3], -10, -5, 0);
     // propulsion
-    polygon->points[4].vx = -10;
-    polygon->points[4].vy = -2;
-
+    setVector(&polygon->points[4], -10, -2, 0);
     #define SHIP_POLYGON_PROPULSION_INDEX 5
-    polygon->points[SHIP_POLYGON_PROPULSION_INDEX].vx = -20;
-    polygon->points[SHIP_POLYGON_PROPULSION_INDEX].vy = 0;
-    
-    polygon->points[6].vx = -10;
-    polygon->points[6].vy = 2;
+    setVector(&polygon->points[SHIP_POLYGON_PROPULSION_INDEX], -20, 0, 0);
+    setVector(&polygon->points[6], -10, 2, 0);
     return polygon;
 }
 
