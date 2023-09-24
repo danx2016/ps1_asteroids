@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
+#include <rand.h>
 #include <stdio.h>
 #include <libetc.h>
 
@@ -44,27 +45,17 @@ static void reset_level()
     {
         for (uint8_t i = 0; i < asteroid_nums[s]; i++)
         {
-            fixed px = (rand() % gfx_screen_width) << 12;
-            fixed py = (rand() % gfx_screen_height) << 12;
-            
-            // avoid center screen position
-            if (px == center_space_check_entity.position.x) px += 4096;
-            if (py == center_space_check_entity.position.y) py += 4096;
-
-            Vec2 position = vec2_init(px, py);
-            fixed angle = rand() % 4096;
-
             // ensure the spawned asteroid does not hit ship at center of screen
-            Vec2 pc = vec2_sub(&position, &center_space_check_entity.position);
-            fixed pc_len = vec2_length(&pc);
-            fixed pc_min_len = (center_space_check_entity.radius_collision + asteroid_sizes[s]) << 12;
-            if (pc_len < pc_min_len)
-            {
-                Vec2 norm = vec2_normalize(&pc);
-                Vec2 scaled = vec2_scale(pc_min_len, &norm);
-                position = vec2_add(&center_space_check_entity.position, &scaled);
-            }
-
+            int32_t px = center_space_check_entity.radius_collision;
+            px += asteroid_sizes[s];
+            px += rand() % 64;
+            px = (px << 12);
+            Vec2 position = vec2_init(px, 0);
+            fixed angle = rand() % 4096;
+            position = vec2_rotate(angle, &position);
+            position.x += center_space_check_entity.position.x;
+            position.y += center_space_check_entity.position.y;
+            angle = rand() % 4096;
             asteroid_spawn(asteroid_sizes[s], &position, angle);
         }
     }
@@ -83,6 +74,7 @@ static void start_title()
 
 static void start_new_game()
 {
+    srand(VSync(-1));
     audio_play_music(MUSIC_ID_PLAYING);
     audio_pause_music();
     audio_play_sound(SOUND_ID_START);
@@ -96,7 +88,6 @@ static void start_new_game()
     game_over_count = 0;
     lives = 3;
     score = 0;
-    srand(VSync(-1));
 }
 
 static void next_level()
