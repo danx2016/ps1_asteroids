@@ -7,18 +7,14 @@
 
 static Polygon* spark_polygon = NULL;
 
-static void explosion_create_spark_polygon()
+static Polygon* explosion_create_spark_shape()
 {
-    // bullet ship's shape
-    spark_polygon = gfx_create_polygon(4);
-    spark_polygon->points[0].vx = -1;
-    spark_polygon->points[0].vy = -1;
-    spark_polygon->points[1].vx = -1;
-    spark_polygon->points[1].vy = 1;
-    spark_polygon->points[2].vx = 1;
-    spark_polygon->points[2].vy = 1;
-    spark_polygon->points[3].vx = 1;
-    spark_polygon->points[3].vy = -1;
+    Polygon *polygon = gfx_create_polygon(4);
+    setVector(&polygon->points[0], -1, -1, 0);
+    setVector(&polygon->points[1], -1, 1, 0);
+    setVector(&polygon->points[2], 1, 1, 0);
+    setVector(&polygon->points[3], 1, -1, 0);
+    return polygon;
 }
 
 Entity* explosion_create_spark(Vec2 *position, uint32_t life_time)
@@ -56,7 +52,7 @@ void explosion_spark_reset(Entity* spark, Vec2 *position, uint32_t life_time)
     // spark's shape
     if (spark_polygon == NULL)
     {
-        explosion_create_spark_polygon();
+        spark_polygon = explosion_create_spark_shape();
     }
     spark->polygon = spark_polygon;
 
