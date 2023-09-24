@@ -15,18 +15,14 @@ void bullet_ship_spawn(Vec2 *position, fixed angle, fixed speed)
     entity_add(bullet_ship);
 }
 
-static void explosion_create_spark_polygon()
+static Polygon* explosion_create_spark_shape()
 {
-    // bullet ship's shape
-    bullet_ship_polygon = gfx_create_polygon(4);
-    bullet_ship_polygon->points[0].vx = -1;
-    bullet_ship_polygon->points[0].vy = -1;
-    bullet_ship_polygon->points[1].vx = -1;
-    bullet_ship_polygon->points[1].vy = 1;
-    bullet_ship_polygon->points[2].vx = 1;
-    bullet_ship_polygon->points[2].vy = 1;
-    bullet_ship_polygon->points[3].vx = 1;
-    bullet_ship_polygon->points[3].vy = -1;
+    Polygon *polygon = gfx_create_polygon(4);
+    setVector(&polygon->points[0], -1, -1, 0);
+    setVector(&polygon->points[1], -1, 1, 0);
+    setVector(&polygon->points[2], 1, 1, 0);
+    setVector(&polygon->points[3], 1, -1, 0);
+    return polygon;
 }
 
 void bullet_ship_reset(Entity* bullet_ship, Vec2 *position, fixed angle, fixed speed)
@@ -55,7 +51,7 @@ void bullet_ship_reset(Entity* bullet_ship, Vec2 *position, fixed angle, fixed s
     // bullet ship's shape
     if (bullet_ship_polygon == NULL)
     {
-        explosion_create_spark_polygon();
+        bullet_ship_polygon = explosion_create_spark_shape();
     }
     bullet_ship->polygon = bullet_ship_polygon;
 
