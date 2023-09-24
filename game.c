@@ -184,7 +184,7 @@ void game_add_score(uint32_t points)
     score += points;
 }
 
-void game_start()
+static void game_init_all()
 {
     mem_init();
     gfx_init();
@@ -194,20 +194,26 @@ void game_start()
     entity_init();
     ship_init();
     asteroid_init();
+}
+
+void game_start()
+{
+    game_init_all();
     
+    // mod music 
     VSyncCallback(audio_play_next_sample);
 
     start_title();
+
+    uint8_t *hud = "\n\n\n LIVES: _               SCORE: ______\n";
 
     while (true)
     {
         input_update();
         entity_update_all();
         entity_render_all();
-        gfx_swap_buffers();
 
-        // show lives
-        uint8_t *hud = "\n\n\n LIVES: _               SCORE: ______\n";
+        // show lives and score
         update_lives(hud, 11);
         update_score(hud, 39);
         
@@ -222,5 +228,7 @@ void game_start()
         {
             handle_playing();
         }
+        
+        gfx_swap_buffers();
     }    
 }
