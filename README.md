@@ -5,7 +5,7 @@ Very simple Asteroids implementation for PS1 using MIPS toolchain + Nugget + Psy
 
 ## Binary ##
 
-* You can download the latest binary PS-EXE here: https://github.com/danx2016/ps1_asteroids/releases/tag/v0.0.1
+* You can download the latest binary PS-EXE here: https://github.com/danx2016/ps1_asteroids/releases/tag/v0.0.2
 
 
 ## How to Build ##
