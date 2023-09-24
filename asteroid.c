@@ -34,22 +34,23 @@ static Polygon* asteroid_create_shape(ASTEROID_SIZE asteroid_size)
     return polygon;
 }
 
+static Entity* asteroid_create_tag(ENTITY_TYPE tag_type)
+{
+    Entity *tag = entity_get_from_cache();
+    tag->type = TAG_START;
+    tag->is_enabled = false;
+    tag->is_destroyed = false;
+    tag->previous_entity = NULL;
+    tag->next_entity = NULL;
+    return tag;
+}
+
 void asteroid_init()
 {
-    asteroid_tag_start = entity_get_from_cache();
-    asteroid_tag_start->type = TAG_START;
-    asteroid_tag_start->is_enabled = false;
-    asteroid_tag_start->is_destroyed = false;
-    asteroid_tag_start->previous_entity = NULL;
-    asteroid_tag_start->next_entity = NULL;
+    asteroid_tag_start = asteroid_create_tag(TAG_START);
     entity_add(asteroid_tag_start);
 
-    asteroid_tag_end = entity_get_from_cache();
-    asteroid_tag_end->type = TAG_END;
-    asteroid_tag_end->is_enabled = false;
-    asteroid_tag_end->is_destroyed= false;
-    asteroid_tag_end->previous_entity = NULL;
-    asteroid_tag_end->next_entity = NULL;
+    asteroid_tag_end = asteroid_create_tag(TAG_END);
     entity_add(asteroid_tag_end);
 
     // pre-create asteroid random shapes
@@ -111,6 +112,15 @@ void asteroid_reset(Entity* asteroid, ASTEROID_SIZE asteroid_size, Vec2 *positio
     asteroid->destroy = entity_destroy;
 }
 
+static void asteroid_spawn_random_3(Entity* asteroid, ASTEROID_SIZE size)
+{
+    fixed angle = rand() % 4096;
+    fixed angle_div = 4096 / 3;
+    asteroid_spawn(size, &asteroid->position, angle);
+    asteroid_spawn(size, &asteroid->position, angle + angle_div);
+    asteroid_spawn(size, &asteroid->position, angle + angle_div * 2);
+}
+
 void asteroid_hit(Entity* asteroid)
 {
     if (asteroid->is_destroyed)
@@ -120,20 +130,12 @@ void asteroid_hit(Entity* asteroid)
     
     if (asteroid->radius_wrap == SIZE_LARGE)
     {
-        fixed angle = rand() % 4096;
-        fixed angle_div = 4096 / 3;
-        asteroid_spawn(SIZE_MEDIUM, &asteroid->position, angle);
-        asteroid_spawn(SIZE_MEDIUM, &asteroid->position, angle + angle_div);
-        asteroid_spawn(SIZE_MEDIUM, &asteroid->position, angle + angle_div * 2);
+        asteroid_spawn_random_3(asteroid, SIZE_MEDIUM);
         game_add_score(SCORE_POINTS_ASTEROID_LARGE);
     }
     else if (asteroid->radius_wrap == SIZE_MEDIUM)
     {
-        fixed angle = rand() % 4096;
-        fixed angle_div = 4096 / 3;
-        asteroid_spawn(SIZE_SMALL, &asteroid->position, angle);
-        asteroid_spawn(SIZE_SMALL, &asteroid->position, angle + angle_div);
-        asteroid_spawn(SIZE_SMALL, &asteroid->position, angle + angle_div * 2);
+        asteroid_spawn_random_3(asteroid, SIZE_SMALL);
         game_add_score(SCORE_POINTS_ASTEROID_MEDIUM);
     }
     else if (asteroid->radius_wrap == SIZE_SMALL)
