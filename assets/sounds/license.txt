@@ -1,0 +1,9 @@
+sounds: shoot.ogg & explosion.ogg
+author: A Dev's Diary
+license: Public Domain
+original link: https://opengameart.org/content/wolfclone-sound-pack
+
+sounds: start.ogg
+author: Kenny
+license: Public Domain
+original link: https://opengameart.org/content/interface-sounds

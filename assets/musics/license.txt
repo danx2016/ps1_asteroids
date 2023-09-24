@@ -1,0 +1,10 @@
+music: music.hit -> the-red-one (musix-the-red-one.mod)
+Author: m0d
+License: Public Domain
+original link: https://modarchive.org/index.php?request=view_by_moduleid&query=53326
+
+music: music2.hit -> Stardust Jam (drozerix_-_stardust_jam.mod)
+Author: Drozerix
+License: Public Domain
+original link: https://modarchive.org/index.php?request=view_by_moduleid&query=201039
+

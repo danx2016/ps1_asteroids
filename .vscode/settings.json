@@ -1,0 +1,22 @@
+{
+    "files.associations": {
+        "stdbool.h": "c",
+        "stdlib.h": "c",
+        "memory.h": "c",
+        "malloc.h": "c",
+        "mem.h": "c",
+        "fixed.h": "c",
+        "gfx.h": "c",
+        "libgte.h": "c",
+        "ship.h": "c",
+        "vec2.h": "c",
+        "entity.h": "c",
+        "stddef.h": "c",
+        "asteroid.h": "c",
+        "math.h": "c",
+        "explosion.h": "c",
+        "modplayer.h": "c",
+        "game.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
+}
