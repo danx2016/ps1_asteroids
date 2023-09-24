@@ -228,7 +228,6 @@ void game_start()
         {
             handle_playing();
         }
-
         gfx_swap_buffers();
     }    
 }
