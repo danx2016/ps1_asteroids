@@ -111,8 +111,10 @@ static void handle_title()
 
 static void handle_playing()
 {
+    Entity *ship = entity_find_first_type(SHIP);
+
     // check level cleared (all asteroids was destroyed?)
-    if (asteroid_tag_start->next_entity == asteroid_tag_end)
+    if (ship != NULL && asteroid_tag_start->next_entity == asteroid_tag_end)
     {
         gfx_print("\n\n\n\n\n\n\n\n\n\n            LEVEL CLEARED!");
         game_cleared_count++;
@@ -123,7 +125,6 @@ static void handle_playing()
         next_level();
     }
 
-    Entity *ship = entity_find_first_type(SHIP);
     if (ship == NULL)
     {
         ship_destroyed_count++;
