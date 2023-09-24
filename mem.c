@@ -1,11 +1,13 @@
 #include <malloc.h>
 #include "mem.h"
 
-static uint8_t heap[MEM_HEAP_SIZE];
-
 void mem_init()
 {
-    InitHeap3((uint32_t*) heap, MEM_HEAP_SIZE);
+    // kindly provided by @spicyjpeg
+    // using the linker symbol __heap_start, it's possible 
+    // to get the maximum heap available for malloc
+    extern uint8_t __heap_start[];
+    InitHeap3((void*) __heap_start + 4, (void*) 0x801ffff8 - (void*) __heap_start);    
 }
 
 void* mem_alloc(size_t mem_size)
