@@ -21,7 +21,7 @@ git clone --recurse-submodules https://github.com/danx2016/ps1_asteroids.git
 ```
 make
 ```
-* Alternatively, you can also build ps-exe within vscode itself using the "Ctrl + Shift + B -> Build Release" key.
+* Alternatively, you can also build ps-exe within vscode itself using "Ctrl + Shift + B -> Build Release".
 
 
 ## Special Thanks To ##
