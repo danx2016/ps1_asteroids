@@ -26,6 +26,6 @@ make
 
 ## Special Thanks To ##
 
-* @Nicolas Noble
-* @spicyjpeg
+* @Nicolas Noble for fixed point math stuff and lots of other explanations...
+* @spicyjpeg for pal/ntsc, malloc and lots of other explanations...
 * and all people from PSX.Dev
