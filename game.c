@@ -27,6 +27,8 @@ static uint32_t score = 0;
 
 static uint8_t lives = 3;
 
+static Entity center_space_check_entity;
+
 static void reset_ship()
 {
     Entity *ship = ship_create();
@@ -44,8 +46,25 @@ static void reset_level()
         {
             fixed px = (rand() % gfx_screen_width) << 12;
             fixed py = (rand() % gfx_screen_height) << 12;
+            
+            // avoid center screen position
+            if (px == center_space_check_entity.position.x) px += 4096;
+            if (py == center_space_check_entity.position.y) py += 4096;
+
             Vec2 position = vec2_init(px, py);
             fixed angle = rand() % 4096;
+
+            // ensure the spawned asteroid does not hit ship at center of screen
+            Vec2 pc = vec2_sub(&position, &center_space_check_entity.position);
+            fixed pc_len = vec2_length(&pc);
+            fixed pc_min_len = (center_space_check_entity.radius_collision + asteroid_sizes[s]) << 12;
+            if (pc_len < pc_min_len)
+            {
+                Vec2 norm = vec2_normalize(&pc);
+                Vec2 scaled = vec2_scale(pc_min_len, &norm);
+                position = vec2_add(&center_space_check_entity.position, &scaled);
+            }
+
             asteroid_spawn(asteroid_sizes[s], &position, angle);
         }
     }
@@ -109,6 +128,21 @@ static void handle_title()
     }
 }
 
+// check if there is a large empty space enough at center of screen where the ship can respawn
+static bool can_ship_respawn()
+{
+    Entity *next_asteroid = asteroid_tag_start->next_entity;
+    while (next_asteroid != NULL && next_asteroid != asteroid_tag_end)
+    {
+        if (entity_check_collision(&center_space_check_entity, next_asteroid))
+        {
+            return false;
+        }
+        next_asteroid = next_asteroid->next_entity;
+    }
+    return true;
+}
+
 static void handle_playing()
 {
     Entity *ship = entity_find_first_type(SHIP);
@@ -142,8 +176,15 @@ static void handle_playing()
 
     if (ship_destroyed_count >= 180)
     {
+    
         if (lives > 0)
         {
+            if (!can_ship_respawn())
+            {
+                printf("nao ha espaco suficiente para ship respawn!\n");
+                return;
+            }
+
             reset_ship();
             lives--;
         }
@@ -203,6 +244,9 @@ void game_start()
     
     // mod music 
     VSyncCallback(audio_play_next_sample);
+
+    center_space_check_entity.radius_collision = 40;
+    center_space_check_entity.position = vec2_init(160 << 12, 128 << 12);
 
     start_title();
 

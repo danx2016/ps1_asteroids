@@ -24,7 +24,7 @@ static Polygon* ship_create_shape()
     // propulsion
     setVector(&polygon->points[4], -10, -2, 0);
     #define SHIP_POLYGON_PROPULSION_INDEX 5
-    setVector(&polygon->points[SHIP_POLYGON_PROPULSION_INDEX], -20, 0, 0);
+    setVector(&polygon->points[SHIP_POLYGON_PROPULSION_INDEX], -10, 0, 0);
     setVector(&polygon->points[6], -10, 2, 0);
     return polygon;
 }
@@ -61,7 +61,7 @@ void ship_reset(Entity* ship)
     ship->radius_wrap = 10;
 
     ship->position = vec2_init(160 << 12, 128 << 12);
-    ship->velocity = vec2_init(1024, 0);
+    ship->velocity = vec2_init(0, 0);
     ship->acceleration = vec2_init(0, 0);
     ship->angle = 0;
     ship->angular_speed = 0;
@@ -97,7 +97,10 @@ void ship_hit(Entity* ship)
 
 void ship_fixed_update(Entity* ship)
 {
-    // handle invincible
+    // propulsion
+    ship->polygon->points[SHIP_POLYGON_PROPULSION_INDEX].vx = -10;
+
+    // pause ship when it's in ready state
     if (ship->is_invincible)
     {
         ship->invincible_time--;
@@ -106,6 +109,7 @@ void ship_fixed_update(Entity* ship)
             ship->invincible_time = 0;
             ship->is_invincible = false;
         }
+        return;
     }
 
     // update angle
@@ -121,9 +125,6 @@ void ship_fixed_update(Entity* ship)
 
     // update acceleration    
     ship->acceleration = vec2_init(0, 0);
-
-    // propulsion
-    ship->polygon->points[SHIP_POLYGON_PROPULSION_INDEX].vx = -10;
 
     if (input_is_action_pressed(0, UP))
     {

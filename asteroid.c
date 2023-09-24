@@ -150,6 +150,13 @@ void asteroid_hit(Entity* asteroid)
 
 void asteroid_fixed_update(Entity* asteroid)
 {
+    // pause asteroids while in ready state
+    Entity *ship = entity_find_first_type(SHIP);
+    if (ship != NULL && ship->is_invincible)
+    {
+        return;
+    }
+
     asteroid->angle += asteroid->angular_speed;
 
     // update position
@@ -158,13 +165,9 @@ void asteroid_fixed_update(Entity* asteroid)
     entity_wrap_position(asteroid);
 
     // check hit ship
-    Entity *ship = entity_find_first_type(SHIP);
-    if (ship != NULL)
+    if (ship != NULL && entity_check_collision(ship, asteroid))
     {
-        if (entity_check_collision(ship, asteroid))
-        {
-            ship->hit(ship);
-        }
+        ship->hit(ship);
     }
 }
 
