@@ -181,7 +181,6 @@ static void handle_playing()
         {
             if (!can_ship_respawn())
             {
-                printf("nao ha espaco suficiente para ship respawn!\n");
                 return;
             }
 
