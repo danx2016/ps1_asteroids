@@ -36,6 +36,8 @@ void audio_init()
     is_music_paused = true;
     is_music_stopped = true;
 
+    // setup the root counter 2 interruption handler to play 
+    // mod music at correct timing regardless of NTSC/PAL video mode
     EnterCriticalSection();
     uint32_t ev = OpenEvent(RCntCNT2, EvSpINT, EvMdINTR, audio_play_next_sample);
     EnableEvent(ev);
