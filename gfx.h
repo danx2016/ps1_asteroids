@@ -17,7 +17,7 @@ extern void gfx_swap_buffers();
 
 typedef struct
 {
-    uint8_t num_points;
+    uint32_t num_points;
     SVECTOR points[];
 } Polygon;
 

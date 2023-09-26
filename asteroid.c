@@ -54,7 +54,7 @@ void asteroid_init()
     entity_add(asteroid_tag_end);
 
     // pre-create asteroid random shapes
-    for (int i = 0; i < ASTEROID_NUM_RANDOM_SHAPES; i++)
+    for (size_t i = 0; i < ASTEROID_NUM_RANDOM_SHAPES; i++)
     {
         polygons_small[i] = asteroid_create_shape(SIZE_SMALL);
         polygons_medium[i] = asteroid_create_shape(SIZE_MEDIUM);

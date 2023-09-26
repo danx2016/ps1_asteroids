@@ -81,7 +81,7 @@ Polygon* gfx_create_polygon(uint8_t num_points)
 {
     Polygon *polygon = (Polygon*) mem_alloc(sizeof(Polygon) + num_points * sizeof(SVECTOR));
     polygon->num_points = num_points;
-    for (int i = 0; i < num_points; i++)
+    for (size_t i = 0; i < num_points; i++)
     {
         polygon->points[i].vx = 0;
         polygon->points[i].vy = 0;
@@ -102,8 +102,8 @@ static void rotate_svector(SVECTOR *v, fixed angle)
 
 void gfx_draw_polygon(Polygon *polygon, int16_t x, int16_t y, fixed angle)
 {
-    uint8_t num_points = polygon->num_points;
-    for (int i = 0; i < num_points; i++)
+    uint32_t num_points = polygon->num_points;
+    for (size_t i = 0; i < num_points; i++)
     {
         SVECTOR pa = polygon->points[i];
         SVECTOR pb = polygon->points[(i + 1) % num_points];

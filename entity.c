@@ -38,7 +38,7 @@ void entity_init()
     destroyed_root_entity.previous_entity = NULL;
 
     // create initial cached entities
-    for (int i = 0; i < ENTITY_INITIAL_CACHE_SIZE; i++)
+    for (uint32_t i = 0; i < ENTITY_INITIAL_CACHE_SIZE; i++)
     {
         Entity *entity = entity_create();
         entity_save_to_cache(entity);

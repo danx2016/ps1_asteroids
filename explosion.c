@@ -79,9 +79,9 @@ void explosion_spark_fixed_update(Entity *spark)
     }
 }
 
-void explosion_spawn(uint8_t num_sparks, Vec2 *position, uint32_t life_time)
+void explosion_spawn(uint32_t num_sparks, Vec2 *position, uint32_t life_time)
 {
-    for (uint8_t i = 0; i < num_sparks; i++)
+    for (uint32_t i = 0; i < num_sparks; i++)
     {
         Entity *spark = explosion_create_spark(position, life_time);
         entity_add(spark);
