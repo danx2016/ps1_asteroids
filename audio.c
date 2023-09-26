@@ -36,11 +36,11 @@ void audio_init()
     is_music_paused = true;
     is_music_stopped = true;
 
-	EnterCriticalSection();
+    EnterCriticalSection();
     uint32_t ev = OpenEvent(RCntCNT2, EvSpINT, EvMdINTR, audio_play_next_sample);
     EnableEvent(ev);
     SetRCnt(RCntCNT2, 0xffff, RCntMdINTR);
-	ExitCriticalSection();
+    ExitCriticalSection();
     StartRCnt(RCntCNT2);
 
     MOD_SetMusicVolume(8000);
