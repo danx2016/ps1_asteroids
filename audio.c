@@ -1,27 +1,49 @@
 #include <stdbool.h>
+#include <stdio.h>
+#include <libapi.h>
 
 #include "audio.h"
 #include "third_party/nugget/modplayer/modplayer.h"
 
-static uint32_t music_time;
+static bool is_music_paused;
+static bool is_music_stopped;
 
-static bool is_music_paused = false;
-static bool is_music_stopped = false;
+static uint32_t bmp_time;
+
+#define BPM_TIME_CONV 140
+#define BPM_TIME_INC  15000
+
+// invoked every ~0.015 secs
+int32_t audio_play_next_sample()
+{
+    if (is_music_paused || is_music_stopped)
+    {
+        return 1;
+    }
+
+    bmp_time += BPM_TIME_INC;
+    while (bmp_time >= MOD_BPM * BPM_TIME_CONV)
+    {
+        bmp_time -= MOD_BPM * BPM_TIME_CONV;
+        MOD_Poll();
+    }
+    
+    return 1;
+}
 
 void audio_init()
 {
-    MOD_SetMusicVolume(8000);
     is_music_paused = true;
-}
+    is_music_stopped = true;
 
-uint32_t next_sample_index;
-void audio_play_next_sample()
-{
-    next_sample_index++;
-    if (!is_music_paused && (next_sample_index % music_time) < (music_time - 1))
-    {
-        MOD_Poll();
-    }
+	EnterCriticalSection();
+    uint32_t ev = OpenEvent(RCntCNT2, EvSpINT, EvMdINTR, audio_play_next_sample);
+    EnableEvent(ev);
+    SetRCnt(RCntCNT2, 0xffff, RCntMdINTR);
+	ExitCriticalSection();
+    StartRCnt(RCntCNT2);
+
+    MOD_SetMusicVolume(8000);
 }
 
 void audio_stop_music()
@@ -50,19 +72,18 @@ void audio_play_music(uint8_t music_id)
 
     switch (music_id)
     {
-    case MUSIC_ID_TITLE:
-        MOD_Load((struct MODFileFormat*) _binary_assets_musics_music_hit_start);
-        music_time = 5;
-        break;
+        case MUSIC_ID_TITLE:
+            MOD_Load((struct MODFileFormat*) _binary_assets_musics_music_hit_start);
+            break;
 
-    case MUSIC_ID_PLAYING:
-        MOD_Load((struct MODFileFormat*) _binary_assets_musics_music2_hit_start);
-        music_time = 10;
-        break;
+        case MUSIC_ID_PLAYING:
+            MOD_Load((struct MODFileFormat*) _binary_assets_musics_music2_hit_start);
+            break;
     }
 }
 
 void audio_play_sound(uint8_t sound_id)
 {
-    MOD_PlaySoundEffect(sound_id - 20, sound_id, 128, 63);
+    #define SPU_CHANNEL_START_FIX 20
+    MOD_PlaySoundEffect(sound_id - SPU_CHANNEL_START_FIX, sound_id, 128, 63);
 }

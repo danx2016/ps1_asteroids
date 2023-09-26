@@ -197,7 +197,7 @@ static void update_lives(uint8_t *text, size_t index)
 
 static void update_score(uint8_t *text, size_t index)
 {
-    for (int i = index; i > index - 6; i--)
+    for (size_t i = index; i > index - 6; i--)
     {
         text[i] = '0';
     }
@@ -232,9 +232,6 @@ void game_start()
 {
     game_init_all();
     
-    // mod music 
-    VSyncCallback(audio_play_next_sample);
-
     center_space_check_entity.radius_collision = 40;
     center_space_check_entity.position = vec2_init(160 << 12, 128 << 12);
 

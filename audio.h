@@ -24,10 +24,6 @@ extern const uint8_t _binary_assets_musics_music2_hit_size[];
 
 
 extern void audio_init();
-
-// call this every vsync
-extern void audio_play_next_sample();
-
 extern void audio_play_music(uint8_t music_id);
 extern void audio_stop_music();
 extern void audio_pause_music();
