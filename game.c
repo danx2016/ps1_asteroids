@@ -41,9 +41,9 @@ static void reset_level()
 {
     const ASTEROID_SIZE asteroid_sizes[] = { SIZE_SMALL, SIZE_SMALL, SIZE_LARGE };
     const uint8_t asteroid_nums[] = { 5, 2, 2 };
-    for (uint8_t s = 0; s < 3; s++)
+    for (size_t s = 0; s < 3; s++)
     {
-        for (uint8_t i = 0; i < asteroid_nums[s]; i++)
+        for (uint32_t i = 0; i < asteroid_nums[s]; i++)
         {
             // ensure the spawned asteroid does not hit ship at center of screen
             int32_t px = center_space_check_entity.radius_collision;
