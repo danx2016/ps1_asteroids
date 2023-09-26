@@ -190,27 +190,6 @@ static void handle_playing()
     }
 }
 
-static void update_lives(uint8_t *text, size_t index)
-{
-    text[index] = lives + '0';
-}
-
-static void update_score(uint8_t *text, size_t index)
-{
-    for (size_t i = index; i > index - 6; i--)
-    {
-        text[i] = '0';
-    }
-
-    uint32_t score_tmp = score;
-    while (score_tmp > 0)
-    {
-        uint8_t dig = score_tmp % 10;
-        score_tmp = score_tmp / 10;
-        text[index--] = dig + '0';
-    }
-}
-
 void game_add_score(uint32_t points)
 {
     score += points;
@@ -237,7 +216,7 @@ void game_start()
 
     start_title();
 
-    uint8_t *hud = "\n\n\n LIVES: _               SCORE: ______\n";
+    uint8_t hud_info[128];
 
     while (true)
     {
@@ -246,10 +225,8 @@ void game_start()
         entity_render_all();
 
         // show lives and score
-        update_lives(hud, 11);
-        update_score(hud, 39);
-        
-        gfx_print(hud);
+        sprintf(hud_info, "\n\n\n LIVES: %d               SCORE: %06d\n", lives, score);
+        gfx_print(hud_info);
 
         // handle title & playing states
         if (!game_started)
