@@ -12,21 +12,25 @@
 Entity *asteroid_tag_start;
 Entity *asteroid_tag_end;
 
-static Polygon *polygons_small[ASTEROID_NUM_RANDOM_SHAPES];
-static Polygon *polygons_medium[ASTEROID_NUM_RANDOM_SHAPES];
-static Polygon *polygons_large[ASTEROID_NUM_RANDOM_SHAPES];
+static uint32_t radius_by_size[] = {
+    ASTEROID_RADIUS_SMALL,
+    ASTEROID_RADIUS_MEDIUM,
+    ASTEROID_RADIUS_LARGE
+};
 
-static Polygon* asteroid_create_shape(ASTEROID_SIZE asteroid_size)
+static Polygon* polygons_by_size[3][ASTEROID_NUM_RANDOM_SHAPES];
+
+static Polygon* asteroid_create_shape(ASTEROID_SIZE asteroid_radius)
 {
     Polygon *polygon = gfx_create_polygon(12);
     int32_t angle_div = 4096 / 12;
     size_t point_index = 0;
     for (int32_t angle = 0; angle < 4096; angle += angle_div)
     {
-        int32_t deformation = asteroid_size / 5;
-        int32_t radius = (asteroid_size - (2 * deformation) - (rand() % deformation)) << 12;
+        int32_t deformation = asteroid_radius / 5;
+        int32_t radius = (asteroid_radius - (2 * deformation) - (rand() % deformation)) << 12;
         Vec2 point = vec2_init(radius, 0);
-        point = vec2_rotate(angle, &point); 
+        point = vec2_rotate(angle, &point);
         polygon->points[point_index].vx = (int16_t) (point.x >> 12);
         polygon->points[point_index].vy = (int16_t) (point.y >> 12);
         point_index++;
@@ -54,11 +58,12 @@ void asteroid_init()
     entity_add(asteroid_tag_end);
 
     // pre-create asteroid random shapes
-    for (size_t i = 0; i < ASTEROID_NUM_RANDOM_SHAPES; i++)
+    for (size_t s = 0; s < 3; s++)
     {
-        polygons_small[i] = asteroid_create_shape(SIZE_SMALL);
-        polygons_medium[i] = asteroid_create_shape(SIZE_MEDIUM);
-        polygons_large[i] = asteroid_create_shape(SIZE_LARGE);
+        for (size_t i = 0; i < ASTEROID_NUM_RANDOM_SHAPES; i++)
+        {
+            polygons_by_size[s][i] = asteroid_create_shape(radius_by_size[s]);
+        }
     }
 }
 
@@ -87,23 +92,12 @@ void asteroid_reset(Entity* asteroid, ASTEROID_SIZE asteroid_size, Vec2 *positio
     asteroid->angle = 0;
     asteroid->angular_speed = 4 + (32 - (rand() % 64));
     
-    asteroid->radius_collision = asteroid_size - 5;
-    asteroid->radius_wrap = asteroid_size;
+    asteroid->radius_collision = radius_by_size[asteroid_size] - 5;
+    asteroid->radius_wrap = radius_by_size[asteroid_size];
 
     // asteroid's random shape
     size_t random_shape = rand() % ASTEROID_NUM_RANDOM_SHAPES;
-    switch (asteroid_size)
-    {
-        case SIZE_SMALL: 
-            asteroid->polygon = polygons_small[random_shape];
-            break;
-        case SIZE_MEDIUM:
-            asteroid->polygon = polygons_medium[random_shape];
-            break;
-        case SIZE_LARGE:
-            asteroid->polygon = polygons_large[random_shape];
-            break;
-    }
+    asteroid->polygon = polygons_by_size[asteroid_size][random_shape];
 
     // asteroid's 'methods'
     asteroid->hit = asteroid_hit;
@@ -127,20 +121,22 @@ void asteroid_hit(Entity* asteroid)
     {
         return;
     }
-    
-    if (asteroid->radius_wrap == SIZE_LARGE)
+
+    switch (asteroid->radius_wrap)
     {
-        asteroid_spawn_random_3(asteroid, SIZE_MEDIUM);
-        game_add_score(SCORE_POINTS_ASTEROID_LARGE);
-    }
-    else if (asteroid->radius_wrap == SIZE_MEDIUM)
-    {
-        asteroid_spawn_random_3(asteroid, SIZE_SMALL);
-        game_add_score(SCORE_POINTS_ASTEROID_MEDIUM);
-    }
-    else if (asteroid->radius_wrap == SIZE_SMALL)
-    {
-        game_add_score(SCORE_POINTS_ASTEROID_SMALL);
+        case ASTEROID_RADIUS_LARGE:
+            asteroid_spawn_random_3(asteroid, SIZE_MEDIUM);
+            game_add_score(SCORE_POINTS_ASTEROID_LARGE);
+            break;
+
+        case ASTEROID_RADIUS_MEDIUM:
+            asteroid_spawn_random_3(asteroid, SIZE_SMALL);
+            game_add_score(SCORE_POINTS_ASTEROID_MEDIUM);
+            break;
+
+        case ASTEROID_RADIUS_SMALL:
+            game_add_score(SCORE_POINTS_ASTEROID_SMALL);
+            break;
     }
 
     asteroid->destroy(asteroid);
