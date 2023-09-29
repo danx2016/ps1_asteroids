@@ -8,10 +8,10 @@
 static bool is_music_paused;
 static bool is_music_stopped;
 
-static uint32_t bmp_time;
-
 #define BPM_TIME_CONV 140
 #define BPM_TIME_INC  15000
+
+static uint32_t bmp_time;
 
 // invoked every ~0.015 secs
 int32_t audio_play_next_sample()
