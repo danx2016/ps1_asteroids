@@ -14,8 +14,7 @@ typedef enum
     CONFIRM = PADRright, 
     CANCEL  = PADRdown, 
     START   = PADstart, 
-    SELECT  = PADselect, 
-    ANY 
+    SELECT  = PADselect
 } ACTION;
 
 extern void input_init();
