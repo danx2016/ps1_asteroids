@@ -207,25 +207,10 @@ void entity_wrap_position(Entity *entity)
     fixed entity_min_y = (gfx_screen_offset_y - er) << 12;
     fixed entity_max_y = (gfx_screen_offset_y + gfx_screen_height + er) << 12;
 
-    if (entity->position.x > entity_max_x)
-    {
-        entity->position.x = entity_min_x;
-    }
-
-    if (entity->position.x < entity_min_x)
-    {
-        entity->position.x = entity_max_x;
-    }
-
-    if (entity->position.y > entity_max_y)
-    {
-        entity->position.y = entity_min_y;
-    }
-
-    if (entity->position.y < entity_min_y)
-    {
-        entity->position.y = entity_max_y;
-    }    
+    if (entity->position.x > entity_max_x) entity->position.x = entity_min_x;
+    if (entity->position.x < entity_min_x) entity->position.x = entity_max_x;
+    if (entity->position.y > entity_max_y) entity->position.y = entity_min_y;
+    if (entity->position.y < entity_min_y) entity->position.y = entity_max_y;
 }
 
 bool entity_is_out_of_display_area(Entity *entity)
@@ -236,12 +221,10 @@ bool entity_is_out_of_display_area(Entity *entity)
     fixed entity_min_y = (gfx_screen_offset_y - er) << 12;
     fixed entity_max_y = (gfx_screen_offset_y + gfx_screen_height + er) << 12;
     
-    if (entity->position.x > entity_max_x) return true;
-    if (entity->position.x < entity_min_x) return true;
-    if (entity->position.y > entity_max_y) return true;
-    if (entity->position.y < entity_min_y) return true;
-
-    return false;
+    return (entity->position.x > entity_max_x ||
+            entity->position.x < entity_min_x ||
+            entity->position.y > entity_max_y ||
+            entity->position.y < entity_min_y);
 }
 
 bool entity_check_collision(Entity *entity_a, Entity *entity_b)
