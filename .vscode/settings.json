@@ -18,7 +18,8 @@
         "modplayer.h": "c",
         "game.h": "c",
         "bullet_ship.h": "c",
-        "qsort.h": "c"
+        "qsort.h": "c",
+        "input.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

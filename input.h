@@ -3,17 +3,18 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <libetc.h>
 
 typedef enum 
 { 
-    UP, 
-    DOWN, 
-    LEFT, 
-    RIGHT, 
-    CONFIRM, 
-    CANCEL, 
-    START, 
-    SELECT, 
+    UP      = PADLup, 
+    DOWN    = PADLdown, 
+    LEFT    = PADLleft, 
+    RIGHT   = PADLright, 
+    CONFIRM = PADRright, 
+    CANCEL  = PADRdown, 
+    START   = PADstart, 
+    SELECT  = PADselect, 
     ANY 
 } ACTION;
 
