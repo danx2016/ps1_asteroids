@@ -103,16 +103,22 @@ static void rotate_svector(SVECTOR *v, fixed angle)
 void gfx_draw_polygon(Polygon *polygon, int16_t x, int16_t y, fixed angle)
 {
     uint32_t num_points = polygon->num_points;
+
+    SVECTOR ps_tmp[num_points];
     for (size_t i = 0; i < num_points; i++)
     {
-        SVECTOR pa = polygon->points[i];
-        SVECTOR pb = polygon->points[(i + 1) % num_points];
-        rotate_svector(&pa, angle);
-        rotate_svector(&pb, angle);
+        ps_tmp[i] = polygon->points[i];
+        rotate_svector(&ps_tmp[i], angle);
+    }
+    
+    for (size_t i = 0; i < num_points; i++)
+    {
+        SVECTOR *pa = &ps_tmp[i];
+        SVECTOR *pb = &ps_tmp[(i + 1) % num_points];
         LINE_F2 *line = (LINE_F2*) next_primitive;
         setLineF2(line);
         setRGB0(line, 255, 255, 255);
-        setXY2(line, pa.vx + x, pa.vy + y, pb.vx + x, pb.vy + y);
+        setXY2(line, pa->vx + x, pa->vy + y, pb->vx + x, pb->vy + y);
         AddPrim(&ot[0], line);
         next_primitive += sizeof(LINE_F2);
     }
