@@ -11,7 +11,7 @@ static bool is_music_stopped;
 #define BPM_TIME_CONV 140
 #define BPM_TIME_INC  15000
 
-static uint32_t bmp_time;
+static uint32_t bpm_time;
 
 // invoked every ~0.015 secs
 int32_t audio_play_next_sample()
@@ -21,10 +21,10 @@ int32_t audio_play_next_sample()
         return 1;
     }
 
-    bmp_time += BPM_TIME_INC;
-    while (bmp_time >= MOD_BPM * BPM_TIME_CONV)
+    bpm_time += BPM_TIME_INC;
+    while (bpm_time >= MOD_BPM * BPM_TIME_CONV)
     {
-        bmp_time -= MOD_BPM * BPM_TIME_CONV;
+        bpm_time -= MOD_BPM * BPM_TIME_CONV;
         MOD_Poll();
     }
     
