@@ -31,6 +31,7 @@ static Polygon* ship_create_shape()
 
 void ship_init()
 {
+    // create ship tag
     ship_tag_start = entity_get_from_cache();
     ship_tag_start->type = TAG_START;
     ship_tag_start->is_enabled = false;
@@ -38,6 +39,9 @@ void ship_init()
     ship_tag_start->previous_entity = NULL;
     ship_tag_start->next_entity = NULL;
     entity_add(ship_tag_start);
+
+    // create ship's shape
+    ship_polygon = ship_create_shape();
 }
 
 Entity* ship_create()
@@ -65,12 +69,6 @@ void ship_reset(Entity* ship)
     ship->acceleration = vec2_init(0, 0);
     ship->angle = 0;
     ship->angular_speed = 0;
-
-    // ship's shape
-    if (ship_polygon == NULL)
-    {
-        ship_polygon = ship_create_shape();
-    }    
     ship->polygon = ship_polygon;
 
     // ship's 'methods'
